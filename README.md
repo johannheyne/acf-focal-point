@@ -35,7 +35,7 @@ Since this a WordPress plugin just search for "ACF: Focal Point" in the plugins 
 
 #### How do I use it?
 
-Pretty much just like an [ACF Image Field](http://www.advancedcustomfields.com/resources/image/). There's a few differences, like not returning just an ID (there's no point without positions), but the basics are the same. 
+Pretty much just like an [ACF Image Field](http://www.advancedcustomfields.com/resources/image/). There's a few differences, like not returning just an ID (there's no point without positions), but the basics are the same.
 
 Make sure the Preview Size and Return Size are of a similar ratio. And make sure the image parent has a height.
 
@@ -58,10 +58,13 @@ The Image object now has a few more values too:
 
 `'class'` refers to the class that Responsify.js is called on. This needs to be on the image tag to work.
 
-`'top'`, `'left'`, `'right'` and `'bottom'` refer to the `data-focus` attributes used to control focal point. 
+`'top'`, `'left'`, `'right'` and `'bottom'` refer to the `data-focus` attributes used to control focal point.
 
 Build image as per above tag. Responsify is called on load and resize automatically on `img.js-focal-point-image`.
 
+#### How do I use a background image?
+
+`<div class="js-focal-point-bg-image" style="background-image: url(img.png);" data-width="400" data-height="300" data-focus-left="0.12" data-focus-top="0.11" data-focus-right="0.40" data-focus-bottom="0.98"></div>`
 
 #### Why are the images returned huge?
 
