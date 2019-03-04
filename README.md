@@ -67,7 +67,16 @@ Build image as per above tag. Responsify is called on load and resize automatica
 ```
 $image = get_field( 'my-image' );
 
-<div class="js-focal-point-bg-image" style="background-image: url(img.png);" data-width="' . $image['width'] . '" data-height="' . $image['height'] . '" data-focus-left="' . $image['focal_point']['left'] . '" data-focus-top="' . $image['focal_point']['top'] . '" data-focus-right="' . $image['focal_point']['right'] . '" data-focus-bottom="' . $image['focal_point']['bottom'] . '"></div>`
+<div
+    class="js-focal-point-bg-image"
+    style="background-image: url(img.png);"
+    data-width="' . $image['width'] . '"
+    data-height="' . $image['height'] . '"
+    data-focus-left="' . $image['focal_point']['left'] . '"
+    data-focus-top="' . $image['focal_point']['top'] . '"
+    data-focus-right="' . $image['focal_point']['right'] . '"
+    data-focus-bottom="' . $image['focal_point']['bottom'] . '"
+></div>
 ```
 
 #### Why are the images returned huge?
