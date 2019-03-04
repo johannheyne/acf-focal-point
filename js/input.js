@@ -69,6 +69,16 @@
 	    $(window).on('resize', drawCanvas);
 
 
+		// ENABLES FIELD IN ACF ACCORDION FIELD {
+
+			acf.add_action( 'show_field', function( $el ){
+
+				// should be called once for this field, but show_field not fire on tab switch for a focal_point fields
+				drawCanvas();
+			});
+
+		// }
+
 	    // When we click the add image button...
 		$add.on('click', function(){
 
