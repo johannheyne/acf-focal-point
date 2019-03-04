@@ -64,7 +64,11 @@ Build image as per above tag. Responsify is called on load and resize automatica
 
 #### How do I use a background image?
 
-`<div class="js-focal-point-bg-image" style="background-image: url(img.png);" data-width="400" data-height="300" data-focus-left="0.12" data-focus-top="0.11" data-focus-right="0.40" data-focus-bottom="0.98"></div>`
+```
+$image = get_field( 'my-image' );
+
+<div class="js-focal-point-bg-image" style="background-image: url(img.png);" data-width="' . $image['width'] . '" data-height="' . $image['height'] . '" data-focus-left="' . $image['focal_point']['left'] . '" data-focus-top="' . $image['focal_point']['top'] . '" data-focus-right="' . $image['focal_point']['right'] . '" data-focus-bottom="' . $image['focal_point']['bottom'] . '"></div>`
+```
 
 #### Why are the images returned huge?
 
