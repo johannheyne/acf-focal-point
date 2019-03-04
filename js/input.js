@@ -58,8 +58,9 @@
 	    	
 	    	// Make sure to trigger load event by triggering load
 	    	// after jquery has done it's iteration
-			if (this.complete) {
-				$(this).load();
+			if ( this.complete ) {
+
+				$(this).trigger( 'load' );
 			}
 		});
 
