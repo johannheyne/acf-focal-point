@@ -1,5 +1,5 @@
 (function($){
-	
+
 	// initialized on ACF events
 	function initialize_field( $el ) {
 
@@ -11,7 +11,7 @@
 			$right 	= $el.find('.acf-focal_point-right'),
 			$bottom = $el.find('.acf-focal_point-bottom'),
 
-			// Elements to get/set 
+			// Elements to get/set
 			$fp 	= $el.find('.acf-focal_point'),
 			$img 	= $el.find('.acf-focal_point-image'),
 			$canvas = $el.find('.acf-focal_point-canvas'),
@@ -30,12 +30,11 @@
 			height: $bottom.val(),
 			size: 	$fp.data('preview_size')
 		};
-		
+
 
 		// DOM elements
 		var img  	 = $img.get(0),
 			canvas 	 = $canvas.get(0);
-
 
 		// To hold WP media frame
 		var file_frame;
@@ -54,8 +53,9 @@
 
 	    // When we've loaded an image, draw the canvas.
 	    // (either on dom load or adding new image from WP media manager)
+
 		$img.on("load", drawCanvas).each(function() {
-	    	
+
 	    	// Make sure to trigger load event by triggering load
 	    	// after jquery has done it's iteration
 			if ( this.complete ) {
@@ -163,10 +163,10 @@
 
 	        if (mouseDown) {
 
-	        	// Keep drawing image as bottom layer 
+	        	// Keep drawing image as bottom layer
 	        	// (otherwise we get multiple layers of the focus, making it opaque)
 	            drawImg();
-	            
+
 	            // Get distance from when we first clicked on canvas
 	            rect.w 			= (e.layerX) - rect.startX;
 	            rect.h 			= (e.layerY) - rect.startY;
@@ -187,8 +187,8 @@
 	            drawFocus(rect.startX, rect.startY, rect.w, rect.h);
 	        }
 	    }, false);
-	    
-		
+
+
 
 		// Used to draw the image onto the canvas
 		function drawImg() {
@@ -212,9 +212,9 @@
         	if (values.top !== null) {
 
         		// Get our positions
-	        	var x = values.left * canvasWidth, 
-	        		y = values.top * canvasHeight, 
-	        		w = (values.width * canvasWidth) - x, 
+	        	var x = values.left * canvasWidth,
+	        		y = values.top * canvasHeight,
+	        		w = (values.width * canvasWidth) - x,
 	        		h = (values.height  * canvasHeight) - y;
 
 	        	// draw focual point
@@ -278,7 +278,7 @@
         	$canvas.width(new_width);
         	$canvas.height(new_height);
 
-        	// And canvas attribute widths 
+        	// And canvas attribute widths
         	// (otherwise it gets a weird coord system)
         	canvas.width = new_width;
 	    	canvas.height = new_height;
@@ -288,12 +288,12 @@
 	    	canvasWidth = new_width;
 	        canvasHeight = new_height;
         }
-		
+
 	}
-	
-	
+
+
 	if( typeof acf.add_action !== 'undefined' ) {
-	
+
 		/*
 		*  ready append (ACF5)
 		*
@@ -307,26 +307,25 @@
 		*  @param	$el (jQuery selection) the jQuery element which contains the ACF fields
 		*  @return	n/a
 		*/
-		
-		acf.add_action('ready append', function( $el ){
-			
+
+		acf.add_action( 'ready append', function( $el ){
+
 			// search $el for fields of type 'focal_point'
 			acf.get_fields({ type : 'focal_point'}, $el).each(function(){
-				
+
 				initialize_field( $(this) );
-				
+
 			});
-			
+
 		});
-		
-		
+
 	} else {
-		
-		
+
+
 		/*
 		*  acf/setup_fields (ACF4)
 		*
-		*  This event is triggered when ACF adds any new elements to the DOM. 
+		*  This event is triggered when ACF adds any new elements to the DOM.
 		*
 		*  @type	function
 		*  @since	1.0.0
@@ -337,18 +336,18 @@
 		*
 		*  @return	n/a
 		*/
-		
+
 		$(document).on('acf/setup_fields', function(e, postbox){
-			
+
 			$(postbox).find('.field[data-field_type="focal_point"]').each(function(){
-				
+
 				initialize_field( $(this) );
-				
+
 			});
-		
+
 		});
-	
-	
+
+
 	}
 
 
