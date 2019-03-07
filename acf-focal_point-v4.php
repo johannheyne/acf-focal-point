@@ -1,12 +1,12 @@
 <?php
 
 class acf_field_focal_point extends acf_field {
-	
+
 	// vars
 	var $settings, // will hold info such as dir / path
 		$defaults; // will hold default field options
-		
-		
+
+
 	/*
 	*  __construct
 	*
@@ -15,7 +15,7 @@ class acf_field_focal_point extends acf_field {
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function __construct() {
 
 		// vars
@@ -27,22 +27,22 @@ class acf_field_focal_point extends acf_field {
 			'preview_size'	=>	'large',
 			'image_size'	=>	'large'
 		);
-    	
-    	
+
+
     	// settings
 		$this->settings = array(
 			'path' 		=> apply_filters('acf/helpers/get_path', __FILE__),
 			'dir' 		=> apply_filters('acf/helpers/get_dir', __FILE__),
 			'version' 	=> '1.0.0'
 		);
-		
-		
+
+
 		// do not delete!
     	parent::__construct();
 
 	}
-	
-	
+
+
 	/*
 	*  create_options()
 	*
@@ -55,16 +55,16 @@ class acf_field_focal_point extends acf_field {
 	*
 	*  @param	$field	- an array holding all the field's data
 	*/
-	
+
 	function create_options( $field ) {
 
 		// Merge defaults
 		$field = array_merge($this->defaults, $field);
-		
+
 		// Key is needed in the field names to correctly save the data
 		$key = $field['name'];
-		
-		
+
+
 		// Create Field Options HTML
 		?>
 <tr class="field_option field_option_<?php echo $this->name; ?>">
@@ -94,14 +94,14 @@ class acf_field_focal_point extends acf_field {
 	</td>
 	<td>
 		<?php
-		
+
 		do_action('acf/create_field', array(
 			'type'		=>	'select',
 			'name'		=>	'fields['.$key.'][image_size]',
 			'value'		=>	$field['image_size'],
 			'choices'	=>	apply_filters('acf/get_image_sizes', array())
 		));
-		
+
 		?>
 	</td>
 </tr>
@@ -112,22 +112,22 @@ class acf_field_focal_point extends acf_field {
 	</td>
 	<td>
 		<?php
-		
+
 		do_action('acf/create_field', array(
 			'type'		=>	'select',
 			'name'		=>	'fields['.$key.'][preview_size]',
 			'value'		=>	$field['preview_size'],
 			'choices'	=>	apply_filters('acf/get_image_sizes', array())
 		));
-		
+
 		?>
 	</td>
 </tr>
 	<?php
-		
+
 	}
-	
-	
+
+
 	/*
 	*  create_field()
 	*
@@ -139,12 +139,12 @@ class acf_field_focal_point extends acf_field {
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function create_field( $field ) {
 
 		// Merge defaults
 		$field = array_merge($this->defaults, $field);
-		
+
 		// Get set image id
 		$id = (isset($field['value']['id'])) ? $field['value']['id'] : '';
 
@@ -157,23 +157,37 @@ class acf_field_focal_point extends acf_field {
 			'bottom'	=>	isset($field['value']['bottom']) ? $field['value']['bottom'] : '',
 		);
 
-		
+
 		// If we already have an image set...
 		if ($id) {
-			
+
 			// Get image by ID, in size set via options
 			$img = wp_get_attachment_image_src($id, $field['preview_size']);
-						
+
 		}
-			
+
 		// If image found...
 		// Set to hide add image button / show canvas
-		$is_active 	= ($id) ? 'active' : '';
+		if ( ! empty( $img ) ) {
+
+			$is_active = 'active';
+		}
+		else {
+
+			$is_active = '';
+		}
 
 		// And set src
-		$url = ($id) ? $img[0] : '';
-		
-		
+		if ( ! empty( $img ) ) {
+
+			$url = $img[0];
+		}
+		else {
+
+			$url = '';
+		}
+
+
 		// create Field HTML
 		?>
 <div class="acf-focal_point <?php echo $is_active; ?>" data-preview_size="<?php echo $field['preview_size']; ?>">
@@ -199,8 +213,8 @@ class acf_field_focal_point extends acf_field {
 </div>
 		<?php
 	}
-	
-	
+
+
 	/*
 	*  input_admin_enqueue_scripts()
 	*
@@ -214,21 +228,21 @@ class acf_field_focal_point extends acf_field {
 	*/
 
 	function input_admin_enqueue_scripts() {
-		
+
 		// register ACF scripts
 		wp_register_script( 'acf-input-focal_point', $this->settings['dir'] . 'js/input.js', 	array('acf-input'), $this->settings['version'] );
-		wp_register_style( 	'acf-input-focal_point', $this->settings['dir'] . 'css/input.css', 	array('acf-input'), $this->settings['version'] ); 
-		
+		wp_register_style( 	'acf-input-focal_point', $this->settings['dir'] . 'css/input.css', 	array('acf-input'), $this->settings['version'] );
+
 		// scripts
 		wp_enqueue_script( array('acf-input-focal_point') );
 
 		// styles
 		wp_enqueue_style( array('acf-input-focal_point') );
-		
-		
+
+
 	}
-	
-	
+
+
 	/*
 	*  format_value_for_api()
 	*
@@ -244,7 +258,7 @@ class acf_field_focal_point extends acf_field {
 	*
 	*  @return	$value	- the modified value
 	*/
-	
+
 	function format_value_for_api( $value, $post_id, $field ) {
 
 		// Merge defaults
@@ -282,19 +296,19 @@ class acf_field_focal_point extends acf_field {
 
 		// Otherwise if returning an object...
 		elseif ($field['save_format'] == 'object') {
-			
-			
-			// Get image object 
+
+
+			// Get image object
 			$src = wp_get_attachment_image_src( $id, 'full' );
-			
+
 			// validate
 			if( !$src ) {
-				return false;	
+				return false;
 			}
 
 			// Get attachment values
 			$attachment = get_post( $id );
-			
+
 			// Build return obj
 			$value = array(
 				'id' 			=> $attachment->ID,
@@ -318,11 +332,11 @@ class acf_field_focal_point extends acf_field {
 				'height' 		=> $src[2],
 				'sizes' 		=> array(),
 			);
-			
-			
+
+
 			// Gind all image sizes
 			$image_sizes = get_intermediate_image_sizes();
-			
+
 			// If we have some image sizes...
 			if ($image_sizes) {
 
@@ -331,22 +345,22 @@ class acf_field_focal_point extends acf_field {
 
 					// Get image obj for each size
 					$src = wp_get_attachment_image_src( $id, $image_size );
-					
-					// Add img obj values to return obj sizes 
+
+					// Add img obj values to return obj sizes
 					$value['sizes'][$image_size] 			= $src[0];
 					$value['sizes'][$image_size.'-width']	= $src[1];
 					$value['sizes'][$image_size.'-height']	= $src[2];
 				}
-				
+
 			} // end if
-			
+
 		} // end elseif
 
-		
+
 		return $value;
 	}
 
-	
+
 }
 
 

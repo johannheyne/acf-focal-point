@@ -1,8 +1,8 @@
 <?php
 
 class acf_field_focal_point extends acf_field {
-	
-	
+
+
 	/*
 	*  __construct
 	*
@@ -15,55 +15,55 @@ class acf_field_focal_point extends acf_field {
 	*  @param	n/a
 	*  @return	n/a
 	*/
-	
+
 	function __construct() {
-		
+
 		/*
 		*  name (string) Single word, no spaces. Underscores allowed
 		*/
-		
+
 		$this->name = 'focal_point';
-		
-		
+
+
 		/*
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
-		
+
 		$this->label = __('Focal Point', 'acf-focal_point');
-		
-		
+
+
 		/*
 		*  category (string) basic | content | choice | relational | jquery | layout | CUSTOM GROUP NAME
 		*/
-		
+
 		$this->category = 'jquery';
-		
-		
+
+
 		/*
 		*  defaults (array) Array of default settings which are merged into the field object. These are used later in settings
 		*/
-		
+
 		$this->defaults = array(
 			'save_format'	=>	'tag',
 			'preview_size'	=>	'large',
 			'image_size'	=>	'large'
 		);
-		
-		
+
+
 		/*
 		*  l10n (array) Array of strings that are used in JavaScript. This allows JS strings to be translated in PHP and loaded via:
 		*  var message = acf._e('focal_point', 'error');
 		*/
-		
+
 		$this->l10n = array();
-		
-				
+
+
 		// do not delete!
     	parent::__construct();
-    	
+
 	}
-	
-	
+
+
 	/*
 	*  render_field_settings()
 	*
@@ -76,9 +76,9 @@ class acf_field_focal_point extends acf_field {
 	*  @param	$field (array) the $field being edited
 	*  @return	n/a
 	*/
-	
+
 	function render_field_settings( $field ) {
-		
+
 		/*
 		*  acf_render_field_setting
 		*
@@ -88,7 +88,7 @@ class acf_field_focal_point extends acf_field {
 		*  More than one setting can be added by copy/paste the above code.
 		*  Please note that you must also have a matching $defaults value for the field name (font_size)
 		*/
-		
+
 		// Render return value radio
 		acf_render_field_setting( $field, array(
 			'label'			=> __('Return Value','acf-focal_point'),
@@ -101,7 +101,7 @@ class acf_field_focal_point extends acf_field {
 				'tag'			=>	__("Image Tag",'acf')
 			)
 		));
-		
+
 		// Render return size select
 		acf_render_field_setting( $field, array(
 			'label'			=> __('Image Size','acf-focal_point'),
@@ -110,7 +110,7 @@ class acf_field_focal_point extends acf_field {
 			'name'			=> 'image_size',
 			'choices'		=>	acf_get_image_sizes()
 		));
-		
+
 		// Render preview size select
 		acf_render_field_setting( $field, array(
 			'label'			=> __('Preview Size','acf-focal_point'),
@@ -119,12 +119,12 @@ class acf_field_focal_point extends acf_field {
 			'name'			=> 'preview_size',
 			'choices'		=>	acf_get_image_sizes()
 		));
-		
+
 
 	}
-	
-	
-	
+
+
+
 	/*
 	*  render_field()
 	*
@@ -139,12 +139,12 @@ class acf_field_focal_point extends acf_field {
 	*  @param	$field (array) the $field being edited
 	*  @return	n/a
 	*/
-	
+
 	function render_field( $field ) {
 
 		// Merge defaults
 		$field = array_merge($this->defaults, $field);
-		
+
 		// Get set image id
 		$id = (isset($field['value']['id'])) ? $field['value']['id'] : '';
 
@@ -156,25 +156,38 @@ class acf_field_focal_point extends acf_field {
 			'right'		=>	isset($field['value']['right']) ? $field['value']['right'] : '',
 			'bottom'	=>	isset($field['value']['bottom']) ? $field['value']['bottom'] : '',
 		);
-		
 
-		
+
+
 		// If we already have an image set...
 		if ($id) {
-			
+
 			// Get image by ID, in size set via options
 			$img = wp_get_attachment_image_src($id, $field['preview_size']);
-						
+
 		}
-			
+
 		// If image found...
 		// Set to hide add image button / show canvas
-		$is_active 	= ($id) ? 'active' : '';
+		if ( ! empty( $img ) ) {
+
+			$is_active = 'active';
+		}
+		else {
+
+			$is_active = '';
+		}
 
 		// And set src
-		$url = ($id) ? $img[0] : '';
-		
-		
+		if ( ! empty( $img ) ) {
+
+			$url = $img[0];
+		}
+		else {
+
+			$url = '';
+		}
+
 		// create Field HTML
 		?>
 <div class="acf-focal_point <?php echo $is_active; ?>" data-preview_size="<?php echo $field['preview_size']; ?>">
@@ -199,8 +212,8 @@ class acf_field_focal_point extends acf_field {
 
 </div><?php
 	}
-	
-		
+
+
 	/*
 	*  input_admin_enqueue_scripts()
 	*
@@ -214,25 +227,25 @@ class acf_field_focal_point extends acf_field {
 	*  @param	n/a
 	*  @return	n/a
 	*/
-	
+
 	function input_admin_enqueue_scripts() {
-		
+
 		$dir = plugin_dir_url( __FILE__ );
-		
-		
+
+
 		// register & include JS
 		wp_register_script( 'acf-input-focal_point', "{$dir}js/input.js", array('acf-input') );
 		wp_enqueue_script('acf-input-focal_point');
-		
-		
+
+
 		// register & include CSS
-		wp_register_style( 'acf-input-focal_point', "{$dir}css/input.css", array('acf-input') ); 
+		wp_register_style( 'acf-input-focal_point', "{$dir}css/input.css", array('acf-input') );
 		wp_enqueue_style('acf-input-focal_point');
-		
-		
+
+
 	}
-	
-	
+
+
 	/*
 	*  format_value()
 	*
@@ -248,9 +261,9 @@ class acf_field_focal_point extends acf_field {
 	*
 	*  @return	$value (mixed) the modified value
 	*/
-	
+
 	function format_value( $value, $post_id, $field ) {
-		
+
 		// Merge defaults
 		$field = array_merge($this->defaults, $field);
 
@@ -286,19 +299,19 @@ class acf_field_focal_point extends acf_field {
 
 		// Otherwise if returning an object...
 		elseif ($field['save_format'] == 'object') {
-			
-			
-			// Get image object 
+
+
+			// Get image object
 			$src = wp_get_attachment_image_src( $id, 'full' );
-			
+
 			// validate
 			if( !$src ) {
-				return false;	
+				return false;
 			}
 
 			// Get attachment values
 			$attachment = get_post( $id );
-			
+
 			// Build return obj
 			$value = array(
 				'id' 			=> $attachment->ID,
@@ -322,11 +335,11 @@ class acf_field_focal_point extends acf_field {
 				'height' 		=> $src[2],
 				'sizes' 		=> array(),
 			);
-			
-			
+
+
 			// Gind all image sizes
 			$image_sizes = get_intermediate_image_sizes();
-			
+
 			// If we have some image sizes...
 			if ($image_sizes) {
 
@@ -335,22 +348,22 @@ class acf_field_focal_point extends acf_field {
 
 					// Get image obj for each size
 					$src = wp_get_attachment_image_src( $id, $image_size );
-					
-					// Add img obj values to return obj sizes 
+
+					// Add img obj values to return obj sizes
 					$value['sizes'][$image_size] 			= $src[0];
 					$value['sizes'][$image_size.'-width']	= $src[1];
 					$value['sizes'][$image_size.'-height']	= $src[2];
 				}
-				
+
 			} // end if
-			
+
 		} // end elseif
 
-		
+
 		return $value;
 	}
-	
-	
+
+
 }
 
 
